@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card for mind - Photos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="book-container">
+        <div class="book-page page-enter" id="bookPage">
+            <div class="custom-photo-grid fade-item">
+                <!-- แถวที่ 1 -->
+                <div class="grid-box box-1" data-id="1"><img src="photo/original 2026-05-09 1859521B0DA771624E.JPG" alt="1"></div>
+                <div class="grid-box box-2" data-id="2"><img src="photo/IMG_6132.jpg" alt="2"></div>
+                <div class="grid-box box-3" data-id="3"><img src="photo/IMG_1274.JPG" alt="3"></div>
+
+                <!-- แถวที่ 2 (เรียง 5, 4, 6) -->
+                <div class="grid-box box-5" data-id="5"><img src="photo/IMG_4613.jpg" alt="5"></div>
+                <div class="grid-box box-4" data-id="4"><img src="photo/original 2026-05-09 1405009FDC8FB25D24.JPG" alt="4"></div>
+                <div class="grid-box box-6" data-id="6"><img src="photo/IMG_4622.jpg" alt="6"></div>
+
+                <!-- แถวที่ 3 -->
+                <div class="grid-box box-7" data-id="7"><img src="photo/IMG_6256.jpg" alt="7"></div>
+                <div class="grid-box box-8" data-id="8"><img src="photo/IMG_6147.jpg" alt="8"></div>
+                <div class="grid-box box-9" data-id="9"><img src="photo/IMG_25322.jpg" alt="9"></div>
+            </div>
+
+            <div class="nav-buttons fade-item">
+                <a href="#" onclick="goToPage('video.html'); return false;" class="hint">👈 ย้อนกลับ</a>
+                <a href="#" onclick="goToPage('text.html'); return false;" class="hint">ไปหน้าถัดไป 👉</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 1. Popup ถามยืนยันการเลือก ================= -->
+    <div id="confirmPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>เลือกรูปนี้ใช่ไหม? 🤔</h3>
+            <p>แน่ใจใช่มั้ยว่าจะเลือกเปิดรูปนี้?</p>
+            <div class="popup-btn-group">
+                <button id="noBtn" class="btn-no">No ❌</button>
+                <button id="yesBtn" class="btn-yes">Yes 💖</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. Popup แสดงรางวัล ================= -->
+    <div id="rewardPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>🎉 ยินดีด้วยน๊าาา! 🎉</h3>
+            
+            <!-- 🌟 เพิ่มแท็กแสดงรูปภาพรางวัลตรงนี้แล้วครับ -->
+            <img id="rewardImg" src="" alt="Reward Image" style="display: none;">
+            
+            <p id="rewardText">คุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨</p>
+            <button id="closeRewardBtn" class="btn-claim">ยินดีน้อมรับของขวัญชิ้นนี้ค่ะ 🥰</button>
+        </div>
+    </div>
+
+    <!-- ================= 3. 🌟 Popup แจ้งว่าได้รับของเดี๋ยวนี้ก่อนเด้งไปหน้าถัดไป ================= -->
+    <div id="finalPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>🎁 รับของขวัญได้เลย! 🎁</h3>
+            <p>คุณจะได้รับของขวัญชิ้นนี้เดี๋ยวนี้เลยน๊า! 💖✨</p>
+            <button id="finalNextBtn" class="btn-claim">ได้รับแล้วววว</button>
+        </div>
+    </div>
+
+    <script>
+        // ฟังก์ชันเปลี่ยนหน้าพร้อม Animation
+        function goToPage(url) {
+            const bookPage = document.getElementById("bookPage");
+            bookPage.classList.remove("page-enter");
+            bookPage.classList.add("page-exit");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500);
+        }
+
+        // ================= ระบบคลิกเลือกรูปและ Popup รางวัล =================
+        const gridBoxes = document.querySelectorAll('.grid-box');
+        const confirmPopup = document.getElementById('confirmPopup');
+        const rewardPopup = document.getElementById('rewardPopup');
+        const rewardText = document.getElementById('rewardText');
+        const rewardImg = document.getElementById('rewardImg');
+        
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const closeRewardBtn = document.getElementById('closeRewardBtn');
+
+        let selectedPhotoId = null;
+
+        // 💡 กำหนดข้อความ (text) และ ที่อยู่รูปภาพ (img) ของแต่ละรูปได้เลยครับ
+        const photoRewards = {
+            "1": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7612.jpg" // 👈 อย่าลืมเช็กชื่อไฟล์รูปจริงในโฟลเดอร์ photo น้า
+            },
+            "2": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7606.jpg"
+            },
+            "3": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7558.jpg"
+            },
+            "4": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7628.jpg"
+            },
+            "5": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7577.jpg"
+            },
+            "6": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7594.jpg"
+            },
+            "7": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7587.jpg"
+            },
+            "8": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7639.jpg"
+            },
+            "9": {
+                text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨",
+                img: "photo/IMG_7546.jpg"
+            }
+        };
+
+        // เมื่อคลิกที่รูปใดๆ
+        gridBoxes.forEach(box => {
+            box.addEventListener('click', function() {
+                selectedPhotoId = this.getAttribute('data-id');
+                confirmPopup.classList.add('show');
+            });
+        });
+
+        // กดปุ่ม No
+        noBtn.addEventListener('click', function() {
+            confirmPopup.classList.remove('show');
+            selectedPhotoId = null;
+        });
+
+        // เมื่อกด Yes
+        yesBtn.addEventListener('click', function() {
+            confirmPopup.classList.remove('show');
+            
+            if (selectedPhotoId && photoRewards[selectedPhotoId]) {
+                const item = photoRewards[selectedPhotoId];
+                
+                rewardText.innerText = item.text;
+                
+                if (item.img && item.img.trim() !== "") {
+                    rewardImg.src = item.img;
+                    rewardImg.style.display = "block";
+                } else {
+                    rewardImg.style.display = "none";
+                }
+            }
+            
+            rewardPopup.classList.add('show');
+        });
+
+        // 🌟 กด "ยินดีน้อมรับของขวัญชิ้นนี้ค่ะ 🥰" -> ปิด Popup รางวัล แล้วเด้ง Popup แจ้งรับของเดี๋ยวนี้!
+        closeRewardBtn.addEventListener('click', function() {
+            rewardPopup.classList.remove('show');
+            setTimeout(() => {
+                finalPopup.classList.add('show');
+            }, 250);
+        });
+
+        // 🌟 กดปุ่มใน Popup สุดท้าย -> พลิกสมุดเปลี่ยนไปหน้า text.html ทันที!
+        finalNextBtn.addEventListener('click', function() {
+            finalPopup.classList.remove('show');
+            goToPage('text.html');
+        });
+    </script>
+</body>
+</html>

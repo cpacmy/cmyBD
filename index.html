@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card for mind - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="introBook" class="intro-book">
+        <h2>To P'Mind 💖</h2>
+        <div class="message-box">
+            <p>สุขสันต์วันเกิดพี่มายด์ของเค้าน๊าาา วันนี้เป็นวันพิเศษมากๆสำหรับมะม๊าเค้าอยากทำให้มันดีที่สุดเท่าที่เค้าจะทำได้ ขอบคุณมะม๊าที่อยู่กับเค้านะ</p>
+        </div>
+        <div class="click-hint">กดเลยยยยยยยย 👉</div>
+    </div>
+
+    <script>
+        const introBook = document.getElementById("introBook");
+        
+        if (introBook) {
+            introBook.addEventListener("click", function() {
+                introBook.classList.add("flip-open");
+                // เมื่อซูมเปิดสมุดเสร็จ (0.7 วิ) ให้เปลี่ยนไปยังหน้าวิดีโอ (video.html)
+                setTimeout(() => {
+                    window.location.href = "video.html";
+                }, 700);
+            });
+        }
+    </script>
+</body>
+</html>

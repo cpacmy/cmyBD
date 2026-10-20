@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card for mind - Message</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="book-container">
+        <!-- ใส่ page-enter เพื่อให้มี Animation พลิกเปิดสมุด 3D ตอนเปลี่ยนเข้ามาหน้านี้ -->
+        <div class="book-page page-enter" id="bookPage">
+            <h2 class="fade-item">😁สุดท้ายยยยย😁</h2>
+            <p class="fade-item">เค้าอยากบอกมะม๊าของเค้าว่า <br> มะม๊าพิเศษที่สุดในชีวิตเค้านะ เค้าอยากให้มะม๊าใช้ชีวิตอย่างมีสติ อยากทำอะไรบอกเค้าได้เลย <br> มีแผนยังไงบอกเค้าได้เลยเค้าจะให้กำลังใจ <br>เค้าจะคอยอยู่ข้างๆมะม๊าไปตลอดชีวิตเลยนะ ❤️เค้ารักมะม๊ามากๆๆๆเลย❤️</p>
+            
+            <!-- ปุ่มกดบนหน้าหลัก -->
+            <div class="nav-buttons fade-item" id="navButtonsContainer">
+                <button id="btsBtn" class="hint" onclick="openBtsPopup()">🎬 ดูเบื้องหลังการทำนะ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 1. Popup วิดีโอเบื้องหลัง ================= -->
+    <div id="btsPopup" class="popup-overlay">
+        <div class="popup-box" style="max-width: 360px;">
+            <h3>🎬 เบื้องหลังความตั้งใจ 💖</h3>
+            
+            <!-- 🌟 สแตนด์บายวิดีโอไว้ + โหลดภาพเฟรมแรกขึ้นมาโชว์ (รอคนกดเล่นเอง) -->
+            <video id="btsVideo" controls preload="metadata" style="width: 100%; border-radius: 12px; margin: 12px 0; max-height: 250px; object-fit: cover; background: #000;">
+                <source src="photo/video.mp4" type="video/mp4">
+                เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+            </video>
+            
+            <button onclick="closeBtsPopup()" class="btn-no" style="width: 100%; padding: 10px;">ปิดวิดีโอ ❌</button>
+        </div>
+    </div>
+
+    <!-- ================= 2. Popup ยืนยันกลับหน้าแรก (เด้งขึ้นมาพอดูวิดีโอจบ) ================= -->
+    <div id="finishPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>🥰 ขอบคุณที่ดูจนจบนะ ❤️</h3>
+            <p>หวังว่ามะม๊าจะชอบเซอร์ไพรส์ชุดนี้ที่เค้าตั้งใจทำให้ทั้งหมดนี้นะครับ!</p>
+            <button onclick="goToCover('index.html')" class="btn-claim">🏠 กลับสู่หน้าแรก (หน้าปก)</button>
+        </div>
+    </div>
+
+    <script>
+        const btsPopup = document.getElementById("btsPopup");
+        const btsVideo = document.getElementById("btsVideo");
+        const finishPopup = document.getElementById("finishPopup");
+        const navButtonsContainer = document.getElementById("navButtonsContainer");
+
+        // เปิด Popup วิดีโอเบื้องหลัง (ไม่สั่ง .play() เพื่อให้กดเล่นเอง)
+        function openBtsPopup() {
+            btsPopup.classList.add("show");
+            btsVideo.currentTime = 0;
+            btsVideo.pause(); // สแตนด์บายวิดีโอไว้ รอผู้ใช้กดเล่นเอง
+        }
+
+        // ปิด Popup วิดีโอเบื้องหลัง
+        function closeBtsPopup() {
+            btsVideo.pause();
+            btsPopup.classList.remove("show");
+            showFinishState();
+        }
+
+        // เมื่อเล่นวิดีโอจบ ให้ปิด Popup วิดีโออัตโนมัติ แล้วเปิด Popup ขอบคุณ
+        btsVideo.addEventListener("ended", function() {
+            closeBtsPopup();
+        });
+
+        // แสดงสภาวะดูจบ + เปลี่ยนปุ่มบนหน้าหลัก
+        function showFinishState() {
+            setTimeout(() => {
+                finishPopup.classList.add("show");
+            }, 300);
+
+            // เปลี่ยนปุ่มบนหน้าหลักไว้รองรับเผื่อกดปิด Popup
+            navButtonsContainer.innerHTML = `
+                <button onclick="goToCover('index.html')" class="hint">🏠 กลับสู่หน้าแรก (หน้าปก)</button>
+            `;
+        }
+
+        // ฟังก์ชันพลิกสมุดพับปิดย้อนกลับไปหน้าปก index.html
+        function goToCover(url) {
+            finishPopup.classList.remove("show");
+            const bookPage = document.getElementById("bookPage");
+            bookPage.classList.remove("page-enter");
+            bookPage.classList.add("page-exit-to-index"); // เล่น Animation พับสมุดปิดย่อลง
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 550);
+        }
+    </script>
+</body>
+</html>
