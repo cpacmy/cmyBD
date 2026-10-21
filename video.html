@@ -6,87 +6,48 @@
     <title>🎂Card🎂</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b81' viewBox='0 0 16 16'><path d='m7.868 1.258-.2-.35a.5.5 0 0 0-.868 0l-.2.35C6.305 1.782 6 2.296 6 3c0 .828.672 1.5 1.5 1.5S9 3.828 9 3c0-.704-.305-1.218-.601-1.742zM4 6.5A1.5 1.5 0 0 1 5.5 5h5A1.5 1.5 0 0 1 12 6.5V8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6.5z'/><path d='M2 11.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v1a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5v-1z'/></svg>">
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body>
 
-    <div class="book-container">
-        <!-- ใส่คลาส page-enter เพื่อให้มี animation พลิกเปิดตอนเริ่มเข้าหน้า -->
-        <div class="book-page page-enter" id="bookPage">
-            <video id="myVideo" class="fade-item" controls playsinline muted>
-                <source src="video1.mp4" type="video/mp4">
-                เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
-            </video>
-
-            <p class="fade-item">"ขอให้พี่มายด์ของซีแพคคนนี้มีความสุขทุกๆวัน❤️<br>เมื่อเจออุปสรรคก็ขอให้ข้ามผ่านมันไปให้ได้นะ😊<br>ซีแพคคนนี้จะอยู่ดูแลอยู่ข้างๆพี่มายด์ของเค้าไปจนแก่เฒ่าเลย" 👨‍🦳👩‍🦳</p>
+    <!-- 🌟 เติมคลาส open เข้าไปเลย เพื่อให้ซองเปิดรอไว้ตั้งแต่แรก -->
+    <div class="envelope-wrapper video-envelope-wrapper open" id="envelopeWrapper">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
             
-            <!-- เพิ่มปุ่มย้อนกลับไปหน้า index.html -->
-            <div class="nav-buttons fade-item">
-                <a href="#" onclick="goToPage('index.html'); return false;" class="hint">👈 ย้อนกลับหน้าแรก</a>
-                <a href="#" onclick="goToPage('game.html'); return false;" class="hint">ไปหน้าตารางรูป 👉</a>
-            </div>
-        </div>
-    </div>
+            <div class="letter-stack">
+                <div class="letter-card active-card" onclick="handleCardClick(event, this)">
+                    
+                    <video id="myVideo" class="fade-item" controls playsinline>
+                        <source src="video1.mp4" type="video/mp4">
+                        เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+                    </video>
 
-    <!-- Popup ถามเมื่อวิดีโอเล่นจบ -->
-    <div id="videoPopup" class="popup-overlay">
-        <div class="popup-box">
-            <h3>ดูจบแล้วน๊าาาาา</h3>
-            <p>อยากดูวิดีโออีกรอบ หรือจะเปิดดูหน้าถัดไป</p>
-            <div class="popup-btn-group">
-                <button id="replayBtn" class="btn-replay">ดูอีกรอบ</button>
-                <button id="nextPageBtn" class="btn-next">ไปหน้าถัดไป</button>
-            </div>  
+                    <div class="message-box">
+                        <p class="fade-item">"ขอให้พี่มายด์ของซีแพคคนนี้มีความสุขทุกๆวัน❤️<br>เมื่อเจออุปสรรคก็ขอให้ข้ามผ่านมันไปให้ได้นะ😊<br>ซีแพคคนนี้จะอยู่ดูแลอยู่ข้างๆพี่มายด์ของเค้าไปจนแก่เฒ่าเลย" 👨‍🦳👩‍🦳</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="pocket"></div>
         </div>
     </div>
 
     <script>
-        const myVideo = document.getElementById("myVideo");
-        const videoPopup = document.getElementById("videoPopup");
-        const replayBtn = document.getElementById("replayBtn");
-        const nextPageBtn = document.getElementById("nextPageBtn");
-        const bookPage = document.getElementById("bookPage");
-
-        // ฟังก์ชันย้ายหน้าพร้อมเลือก Animation ให้เหมาะสม
-        function goToPage(url) {
-            if (myVideo) myVideo.pause(); // หยุดวิดีโอก่อนเปลี่ยนหน้า
-            bookPage.classList.remove("page-enter");
-
-            // 🌟 ถ้ากดกลับไปหน้าแรก (index.html) ให้เล่น Animation พับปิดสมุดย้อนกลับ
-            if (url === 'index.html') {
-                bookPage.classList.add("page-exit-to-index");
-            } else {
-                // ถ้าไปหน้าถัดไป (game.html) ให้พลิกไปหน้าถัดไปตามปกติ
-                bookPage.classList.add("page-exit");
+        // ไม่ต้องมีโค้ดเปิดซองแล้ว เพราะซองเปิดอยู่แล้ว
+        function handleCardClick(event, card) {
+            // ถ้าผู้ใช้กดที่ตัววิดีโอเพื่อดู (Play/Pause) จะไม่ทำให้จดหมายปลิว
+            if (event.target.tagName.toLowerCase() === 'video') {
+                return; 
             }
 
-            // รอเล่น Animation ให้จบเนียนๆ (550ms) แล้วค่อยย้ายหน้า
+            event.stopPropagation();
+            card.classList.add("fly-away");
+
+            // เมื่อจดหมายปลิวออกไป ให้เปลี่ยนหน้าไป game.html
             setTimeout(() => {
-                window.location.href = url;
-            }, 550);
-        }
-
-        if (myVideo) {
-            myVideo.addEventListener("ended", function() {
-                if (videoPopup) videoPopup.classList.add("show");
-            });
-        }
-
-        if (replayBtn) {
-            replayBtn.addEventListener("click", function() {
-                if (videoPopup) videoPopup.classList.remove("show");
-                if (myVideo) {
-                    myVideo.currentTime = 0;
-                    myVideo.play();
-                }
-            });
-        }
-
-        if (nextPageBtn) {
-            nextPageBtn.addEventListener("click", function() {
-                if (videoPopup) videoPopup.classList.remove("show");
-                goToPage("game.html"); // พลิกเปิดไปหน้า game.html แบบลื่นๆ
-            });
+                window.location.href = "game.html";
+            }, 600);
         }
     </script>
 </body>

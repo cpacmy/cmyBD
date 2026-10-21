@@ -9,25 +9,70 @@
 </head>
 <body>
 
-    <div id="introBook" class="intro-book">
-        <h2>To P'Mind 💖</h2>
-        <div class="message-box">
-            <p>สุขสันต์วันเกิดพี่มายด์ของเค้าน๊าาา วันนี้เป็นวันพิเศษมากๆสำหรับมะม๊าเค้าอยากทำให้มันดีที่สุดเท่าที่เค้าจะทำได้ ขอบคุณมะม๊าที่อยู่กับเค้านะ</p>
+    <!-- โครงสร้างซองจดหมายขนาดใหญ่พอดีสายตา -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope" id="envelope">
+            <!-- ฝาซองจดหมายด้านบน -->
+            <div class="flap"></div>
+
+            <!-- 🌟 เพิ่มตราประทับหัวใจตรงนี้เลย -->
+            <div class="heart-seal" id="heartSeal">❤️</div>
+            
+            <!-- กองแผ่นจดหมายด้านในซอง (สามารถเพิ่มแผ่นจดหมายย่อยๆ เพิ่มได้ตามต้องการ) -->
+            <div class="letter-stack">
+                <div class="letter-card active-card" onclick="handleCardClick(event, this)">
+                    <h2>To P'Mind 💖</h2>
+                    <div class="message-box">
+                        <p>สุขสันต์วันเกิดพี่มายด์ของเค้าน๊าาา วันนี้เป็นวันพิเศษมากๆสำหรับมะม๊าเค้าอยากทำให้มันดีที่สุดเท่าที่เค้าจะทำได้ ขอบคุณมะม๊าที่ใช้ชีวิตได้อย่างดีมากๆเลยนะ</p>
+                    </div>
+                    <div class="click-hint"></div>
+                </div>
+            </div>
+
+            <!-- ตัวซองจดหมายด้านหน้า -->
+            <div class="pocket"></div>
         </div>
-        <div class="click-hint">กดเลยยยยยยยย 👉</div>
     </div>
 
     <script>
-        const introBook = document.getElementById("introBook");
-        
-        if (introBook) {
-            introBook.addEventListener("click", function() {
-                introBook.classList.add("flip-open");
-                // เมื่อซูมเปิดสมุดเสร็จ (0.7 วิ) ให้เปลี่ยนไปยังหน้าวิดีโอ (video.html)
+        let isOpen = false;
+        const envelopeWrapper = document.getElementById("envelopeWrapper");
+        const heartSeal = document.getElementById("heartSeal"); // ดึงหัวใจมาใช้งาน
+
+        // กดที่ซองเพื่อเปิด
+        envelopeWrapper.addEventListener("click", function(e) {
+            if (!isOpen) {
+                isOpen = true;
+                
+                // 1. สั่งให้หัวใจสลายหายไปก่อน
+                heartSeal.classList.add("broken");
+                
+                // 2. หน่วงเวลาให้หัวใจจางหายแป๊บนึง (0.5 วินาที) แล้วค่อยเปิดฝาซอง
                 setTimeout(() => {
+                    envelopeWrapper.classList.add("open");
+                }, 500); 
+            }
+        });
+
+        // ฟังก์ชันเมื่อกดที่แผ่นจดหมายเพื่อปลิวออกไป
+        function handleCardClick(event, card) {
+            if (!isOpen) return;
+            event.stopPropagation(); // ป้องกันไม่ให้ไปตีกับอีเวนต์เปิดซอง
+
+            // ใส่คลาสปลิวออกไปทางด้านข้าง/ด้านบน
+            card.classList.add("fly-away");
+
+            setTimeout(() => {
+                card.style.display = "none";
+                const remainingCards = document.querySelectorAll(".letter-card:not(.fly-away)");
+                
+                if (remainingCards.length > 0) {
+                    remainingCards[0].classList.add("active-card");
+                } else {
+                    // เมื่อแผ่นจดหมายหมดแล้ว ให้เปลี่ยนไปหน้า video.html
                     window.location.href = "video.html";
-                }, 700);
-            });
+                }
+            }, 600);
         }
     </script>
 </body>
