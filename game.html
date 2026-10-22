@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎂Card🎂</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b81' viewBox='0 0 16 16'><path d='m7.868 1.258-.2-.35a.5.5 0 0 0-.868 0l-.2.35C6.305 1.782 6 2.296 6 3c0 .828.672 1.5 1.5 1.5S9 3.828 9 3c0-.704-.305-1.218-.601-1.742zM4 6.5A1.5 1.5 0 0 1 5.5 5h5A1.5 1.5 0 0 1 12 6.5V8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6.5z'/><path d='M2 11.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v1a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5v-1z'/></svg>">
+    <title>Card</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>">
+    <!-- <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b81' viewBox='0 0 16 16'><path d='m7.868 1.258-.2-.35a.5.5 0 0 0-.868 0l-.2.35C6.305 1.782 6 2.296 6 3c0 .828.672 1.5 1.5 1.5S9 3.828 9 3c0-.704-.305-1.218-.601-1.742zM4 6.5A1.5 1.5 0 0 1 5.5 5h5A1.5 1.5 0 0 1 12 6.5V8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6.5z'/><path d='M2 11.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v1a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5v-1z'/></svg>"> -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,12 +16,11 @@
             <div class="flap"></div>
             
             <div class="letter-stack">
-                <!-- ใส่ id="gameCard" เพื่อเอาไว้ทำอนิเมชันปลิวออกตอนจบ -->
                 <div class="letter-card active-card" id="gameCard">
                     
                     <h2 style="font-size: 1.5rem; margin-top: 0; margin-bottom: 10px;">🎁 เลือกของขวัญเลย!</h2>
 
-                    <!-- 🌟 ตาราง 6 กล่อง (เฉพาะรูปที่เลือกไว้) -->
+                    <!-- 🌟 ตาราง 6 กล่อง -->
                     <div class="gift-grid fade-item">
                         <div class="grid-box box-1" data-id="1"><img src="photo/original 2026-05-09 1859521B0DA771624E.JPG" alt="1"></div>
                         <div class="grid-box box-3" data-id="3"><img src="photo/IMG_1274.JPG" alt="3"></div>
@@ -37,14 +37,18 @@
         </div>
     </div>
 
-    <!-- ================= 1. Popup ถามยืนยันการเลือก ================= -->
-    <div id="confirmPopup" class="popup-overlay">
+    <!-- ================= 1. Popup แสดงกล่องของขวัญ (กดที่กล่องเพื่อเปิด) ================= -->
+    <div id="openBoxPopup" class="popup-overlay">
         <div class="popup-box">
-            <h3>เลือกรูปนี้ใช่ไหม? 🤔</h3>
-            <p>แน่ใจใช่มั้ยว่าจะเลือกเปิดรูปนี้?</p>
-            <div class="popup-btn-group">
-                <button id="noBtn" class="btn-no">No ❌</button>
-                <button id="yesBtn" class="btn-yes">Yes 💖</button>
+            <h3>🎁 คุณเลือกกล่องนี้! 🎁</h3>
+            <p style="margin-top: 5px; color: #ff4d6d; font-weight: bold;">แตะที่กล่องของขวัญเพื่อเปิดเลย! 👇</p>
+            
+            <!-- 🌟 กดคลิกที่ไอคอนกล่องนี้เพื่อเปิดรางวัลได้ทันที -->
+            <div class="gift-box-icon" id="giftBoxClick">🎁</div>
+
+            <!-- 🌟 ปรับปุ่มเลือกใหม่ให้เป็นทรงเดียวกับปุ่มเปิดกล่อง (btn-claim) -->
+            <div style="margin-top: 10px;">
+                <button id="cancelBoxBtn" class="btn-claim" style="background: #ff6b81; color: white;">เลือกใหม่</button>
             </div>
         </div>
     </div>
@@ -69,16 +73,15 @@
     </div>
 
     <script>
-        // ================= ระบบคลิกเลือกรูปและ Popup รางวัล (ดั้งเดิม 100%) =================
         const gridBoxes = document.querySelectorAll('.grid-box');
-        const confirmPopup = document.getElementById('confirmPopup');
+        const openBoxPopup = document.getElementById('openBoxPopup');
+        const giftBoxClick = document.getElementById('giftBoxClick');
         const rewardPopup = document.getElementById('rewardPopup');
         const rewardText = document.getElementById('rewardText');
         const rewardImg = document.getElementById('rewardImg');
         const finalPopup = document.getElementById('finalPopup');
         
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
+        const cancelBoxBtn = document.getElementById('cancelBoxBtn');
         const closeRewardBtn = document.getElementById('closeRewardBtn');
         const finalNextBtn = document.getElementById('finalNextBtn');
 
@@ -86,30 +89,34 @@
 
         const photoRewards = {
             "1": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7612.JPG" },
-            "2": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7606.JPG" },
-            "3": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7558.JPG" },
-            "4": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7628.JPG" },
-            "5": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7577.JPG" },
-            "6": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7594.JPG" },
-            "7": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7587.JPG" },
-            "8": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7639.JPG" },
-            "9": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7546.JPG" }
+            "2": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7606.JPG" },
+            "3": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7558.JPG" },
+            "4": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7628.JPG" },
+            "5": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7577.JPG" },
+            "6": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7594.JPG" },
+            "7": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7587.JPG" },
+            "8": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7639.JPG" },
+            "9": { text: "ยินดีด้วยคุณได้รับกระเป๋า Polo <br> จาก ซีแพคสุดหล่อ 👜✨", img: "photo/IMG_7546.JPG" }
         };
 
+        // เมื่อกดรูป 1 ใน 6 กล่อง
         gridBoxes.forEach(box => {
             box.addEventListener('click', function() {
                 selectedPhotoId = this.getAttribute('data-id');
-                confirmPopup.classList.add('show');
+                openBoxPopup.classList.add('show');
             });
         });
 
-        noBtn.addEventListener('click', function() {
-            confirmPopup.classList.remove('show');
+        // เมื่อกดปุ่มเลือกใหม่
+        cancelBoxBtn.addEventListener('click', function() {
+            openBoxPopup.classList.remove('show');
             selectedPhotoId = null;
         });
 
-        yesBtn.addEventListener('click', function() {
-            confirmPopup.classList.remove('show');
+        // 🌟 เมื่อกดที่ "ตัวกล่องของขวัญ" โดยตรงเพื่อเปิดดูรางวัล
+        giftBoxClick.addEventListener('click', function() {
+            openBoxPopup.classList.remove('show');
+            
             if (selectedPhotoId && photoRewards[selectedPhotoId]) {
                 const item = photoRewards[selectedPhotoId];
                 rewardText.innerHTML = item.text;
@@ -130,15 +137,14 @@
             }, 250);
         });
 
-        // 🌟 แก้ไขตรงนี้: กดปุ่มสุดท้าย -> แผ่นจดหมายปลิวออก แล้วค่อยไป text.html
         finalNextBtn.addEventListener('click', function() {
             finalPopup.classList.remove('show');
             
             const gameCard = document.getElementById("gameCard");
-            gameCard.classList.add("fly-away"); // สั่งให้การ์ดปลิว
+            gameCard.classList.add("fly-away"); 
             
             setTimeout(() => {
-                window.location.href = 'text.html'; // ไปหน้าถัดไปเมื่อปลิวสุดจอ
+                window.location.href = 'text.html'; 
             }, 600);
         });
     </script>
